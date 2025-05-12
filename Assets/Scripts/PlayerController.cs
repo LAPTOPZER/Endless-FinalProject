@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,6 +29,15 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private int maxHP = 3;
     private int currentHP;
+
+
+    //Final Project
+    public TextMeshProUGUI scoreText;
+    public float score = 0f;
+    public float scoreInterval = 0.1f;
+    private float timer = 0f;
+    private bool isAlive = true;
+    public GameObject Lose;
 
     void Awake()
     {
@@ -64,6 +74,7 @@ public class PlayerController : MonoBehaviour
         }
 
         isSprinting = sprintAction.IsPressed();
+        ScoreManager();
         //Debug.Log(isSprinting);
     }
 
@@ -80,14 +91,6 @@ public class PlayerController : MonoBehaviour
             TakeDamage(1);
             explosionParticle.Play(); 
             Destroy(collision.gameObject);
-
-            //Debug.Log("Game Over!");
-            //gameOver = true;
-            //playerAnim.SetBool("Death_b", true);
-            //playerAnim.SetInteger("DeathType_int", 1);
-            //explosionParticle.Play();
-            //dirtParticle.Stop();
-            //playerAudio.PlayOneShot(crashSfx);
         }
     }
 
@@ -108,5 +111,23 @@ public class PlayerController : MonoBehaviour
         explosionParticle.Play();
         dirtParticle.Stop();
         playerAudio.PlayOneShot(crashSfx);
+        isAlive = false;
+        Lose.SetActive(true);
+    }
+
+    private void ScoreManager()
+    {
+        if (isAlive)
+        {
+            timer += Time.deltaTime;
+
+            while (timer >= scoreInterval)
+            {
+                score += 1;
+                timer -= scoreInterval;
+            }
+
+            scoreText.text = "Score: " + Mathf.FloorToInt(score).ToString();
+        }
     }
 }
