@@ -6,7 +6,6 @@ public class UIHandler : MonoBehaviour
 {
     public void StartGame()
     {
-        Time.timeScale = 1f;
         SceneManager.LoadScene("Game");
     }
 

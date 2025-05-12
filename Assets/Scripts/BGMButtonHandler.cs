@@ -16,7 +16,6 @@ public class BGMButtonHandler : MonoBehaviour
         bgm = FindObjectOfType<BGM>();
         if (bgm == null)
         {
-            Debug.LogError("No BackgroundMusicController found in scene!");
             btn.interactable = false;
             return;
         }

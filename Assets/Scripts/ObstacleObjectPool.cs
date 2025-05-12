@@ -36,6 +36,7 @@ public class ObstacleObjectPool : MonoBehaviour
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
+
     void SpawnObstacle()
     {
         int index = Random.Range(0, obstaclePrefabs.Count);

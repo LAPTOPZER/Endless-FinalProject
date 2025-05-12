@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+
     public float jumpForce;
     public float gravityModifier;
     public ParticleSystem explosionParticle;
@@ -33,11 +34,12 @@ public class PlayerController : MonoBehaviour
 
     //Final Project
     public TextMeshProUGUI scoreText;
-    public float score = 0f;
-    public float scoreInterval = 0.1f;
+    public static float score = 0f;
+    public float scoreInterval = 0.1f;  
     private float timer = 0f;
     private bool isAlive = true;
     public GameObject Lose;
+    private static bool gravitySet = false;
 
     void Awake()
     {
@@ -49,8 +51,12 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // rb.AddForce(1000 * Vector3.up);
-        Physics.gravity *= gravityModifier;
+        score = 0f;
+        if (!gravitySet)
+        {
+            Physics.gravity *= gravityModifier;
+            gravitySet = true;
+        }
 
         jumpAction = InputSystem.actions.FindAction("Jump");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -62,11 +68,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (jumpAction.triggered && isOnGround && !gameOver)
+
         if (jumpAction.triggered && jumpCount < maxJumps && !gameOver)
         {
             rb.AddForce(jumpForce * Vector3.up, ForceMode.Impulse);
-            //isOnGround = false;
             jumpCount++;
             playerAnim.SetTrigger("Jump_trig");
             dirtParticle.Stop();
@@ -75,14 +80,12 @@ public class PlayerController : MonoBehaviour
 
         isSprinting = sprintAction.IsPressed();
         ScoreManager();
-        //Debug.Log(isSprinting);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            //isOnGround = true;
             jumpCount = 0;
             dirtParticle.Play();
         }
@@ -111,10 +114,14 @@ public class PlayerController : MonoBehaviour
         explosionParticle.Play();
         dirtParticle.Stop();
         playerAudio.PlayOneShot(crashSfx);
+
+        //Final Project
         isAlive = false;
         Lose.SetActive(true);
     }
 
+
+    //Final Project
     private void ScoreManager()
     {
         if (isAlive)
@@ -127,7 +134,7 @@ public class PlayerController : MonoBehaviour
                 timer -= scoreInterval;
             }
 
-            scoreText.text = "Score: " + Mathf.FloorToInt(score).ToString();
+            scoreText.text = "Score : " + Mathf.FloorToInt(score).ToString();
         }
     }
 }

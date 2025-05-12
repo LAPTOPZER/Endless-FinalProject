@@ -8,6 +8,7 @@ public class MoveLeft : MonoBehaviour
 
     private PlayerController playerController;
 
+
     void Start()
     {
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -18,6 +19,8 @@ public class MoveLeft : MonoBehaviour
     {
         if (!playerController.gameOver)
         {
+            SpeedUp();
+
             float moveSpeed;
             if (PlayerController.isSprinting)
             {
@@ -28,11 +31,30 @@ public class MoveLeft : MonoBehaviour
                 moveSpeed = speed * 1;
             }
             transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+
         }
 
         if (transform.position.x < leftBound && gameObject.CompareTag("Obstacle"))
         {
             Destroy(gameObject);
+        }
+
+    }
+
+    //Final Project
+    private void SpeedUp()
+    {
+        if (PlayerController.score >= 2000)
+        {
+            speed = 18f;
+        }
+        else if (PlayerController.score >= 1500)
+        {
+            speed = 15f;
+        }
+        else if (PlayerController.score >= 500)
+        {
+            speed = 12f;
         }
     }
 }
